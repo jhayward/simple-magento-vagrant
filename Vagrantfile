@@ -11,6 +11,11 @@ Vagrant.configure("2") do |config|
 
   # Every Vagrant virtual environment requires a box to build off of.
   config.vm.box = "ubuntu/trusty64"
+
+  config.vm.provider "parallels" do |v, override|
+    override.vm.box = "parallels/ubuntu-14.04"
+    override.vm.box_url = "https://vagrantcloud.com/parallels/ubuntu-14.04"
+  end  
   
   config.vm.provision :shell, :path => "bootstrap.sh", :args => [sample_data]
 
@@ -18,7 +23,13 @@ Vagrant.configure("2") do |config|
   # within the machine from a port on the host machine. In the example below,
   # accessing "localhost:8080" will access port 80 on the guest machine.
   config.vm.network :forwarded_port, guest: 80, host: 8080
-  config.vm.synced_folder ".", "/vagrant", :mount_options => ["dmode=777","fmode=666"]
+  
+config.vm.provider "parallels" do |v, override|
+  override.vm.synced_folder ".", "/vargrant", mount_options: ["share"]
+end
+
+#virtualbox specific
+  #config.vm.synced_folder ".", "/vagrant", :mount_options => ["dmode=777","fmode=666"]
 
   config.ssh.forward_agent = true
 

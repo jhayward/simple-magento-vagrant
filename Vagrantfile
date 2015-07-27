@@ -24,16 +24,15 @@ Vagrant.configure("2") do |config|
   # accessing "localhost:8080" will access port 80 on the guest machine.
   config.vm.network :forwarded_port, guest: 80, host: 8080
   
-config.vm.provider "parallels" do |v, override|
-  override.vm.synced_folder ".", "/vargrant", mount_options: ["share"]
-end
-
-#virtualbox specific
-  #config.vm.synced_folder ".", "/vagrant", :mount_options => ["dmode=777","fmode=666"]
+  config.vm.provider "parallels" do |v, override|
+    override.vm.synced_folder ".", "/vagrant", mount_options: ["share", "nosuid"]
+  end
 
   config.ssh.forward_agent = true
-
-  config.vm.provider :virtualbox do |vb|
+  
+  #virtualbox specific
+  config.vm.provider :virtualbox do |vb, override|
+    override.vm.synced_folder ".", "/vagrant", :mount_options => ["dmode=777","fmode=666"]
     vb.customize ["modifyvm", :id, "--memory", "1024"]
     vb.name = "simple-magento-vagrant"
   end

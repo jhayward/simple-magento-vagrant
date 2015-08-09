@@ -1,3 +1,12 @@
+
+#### Additions
+
+* Parallels Support
+* Installs modman + creates a modules directory
+* Checks for magento install package to use instead of download
+
+-----------------------
+
 simple-magento-vagrant
 ======================
 

@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
 SAMPLE_DATA=$1
-MAGE_VERSION="1.9.1.0"
-DATA_VERSION="1.9.0.0"
+MAGE_VERSION="1.9.2.0"
+DATA_VERSION="1.9.1.0"
 
 # Update Apt
 # --------------------
@@ -21,6 +21,7 @@ php5enmod mcrypt
 # --------------------
 rm -rf /var/www/html
 mkdir /vagrant/httpdocs
+mkdir /vagrant/modules
 ln -fs /vagrant/httpdocs /var/www/html
 
 # Replace contents of default Apache vhost
@@ -68,8 +69,12 @@ mysql -u root -e "FLUSH PRIVILEGES"
 
 # Download and extract
 if [[ ! -f "/vagrant/httpdocs/index.php" ]]; then
+  cd /vagrant
+  if [[ ! -f "/vagrant/magento-${MAGE_VERSION}.tar.gz" ]]; then
+    wget http://www.magentocommerce.com/downloads/assets/${MAGE_VERSION}/magento-${MAGE_VERSION}.tar.gz
+  fi
   cd /vagrant/httpdocs
-  wget http://www.magentocommerce.com/downloads/assets/${MAGE_VERSION}/magento-${MAGE_VERSION}.tar.gz
+  cp /vagrant/magento-${MAGE_VERSION}.tar.gz .
   tar -zxvf magento-${MAGE_VERSION}.tar.gz
   mv magento/* magento/.htaccess .
   chmod -R o+w media var
@@ -77,7 +82,6 @@ if [[ ! -f "/vagrant/httpdocs/index.php" ]]; then
   # Clean up downloaded file and extracted dir
   rm -rf magento*
 fi
-
 
 # Sample Data
 if [[ $SAMPLE_DATA == "true" ]]; then
@@ -116,3 +120,8 @@ cd /vagrant/httpdocs
 wget https://raw.github.com/netz98/n98-magerun/master/n98-magerun.phar
 chmod +x ./n98-magerun.phar
 sudo mv ./n98-magerun.phar /usr/local/bin/
+
+# Install Modman
+# --------------------
+bash < <(wget -q --no-check-certificate -O - https://raw.github.com/colinmollenhour/modman/master/modman-installer)
+

@@ -2,6 +2,7 @@
 package.box
 httpdocs
 magento-sample-data*.tar.gz
+magento-*.tar.gz
 
 # Numerous always-ignore extensions
 *.diff
@@ -38,3 +39,4 @@ dwsync.xml
 .svn
 .CVS
 .idea
+modules

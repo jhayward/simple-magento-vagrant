@@ -21,8 +21,12 @@ php5enmod mcrypt
 # --------------------
 rm -rf /var/www/html
 mkdir /vagrant/httpdocs
-mkdir /vagrant/modules
 ln -fs /vagrant/httpdocs /var/www/html
+
+#Modules folder + xdebug log folder
+mkdir /vagrant/modules
+mkdir /var/log/xdebug
+chown www-data:www-data /var/log/xdebug
 
 # Replace contents of default Apache vhost
 # --------------------

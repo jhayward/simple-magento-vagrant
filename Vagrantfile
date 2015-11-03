@@ -12,6 +12,15 @@ Vagrant.configure("2") do |config|
   # Every Vagrant virtual environment requires a box to build off of.
   config.vm.box = "ubuntu/trusty64"
 
+   #virtualbox specific
+  config.vm.provider :virtualbox do |vb, override|
+    override.vm.synced_folder ".", "/vagrant", :mount_options => ["dmode=777","fmode=666"]
+    vb.customize ["modifyvm", :id, "--memory", "1024"]
+    vb.customize ["setextradata", :id, "VBoxInternal2/SharedFoldersEnableSymlinksCreate/v-root", "1"]
+    vb.customize ["setextradata", :id, "VBoxInternal2/SharedFoldersEnableSymlinksCreate/vagrant", "1"]
+    vb.name = "simple-magento-vagrant"
+  end
+
   config.vm.provider "parallels" do |v, override|
     override.vm.box = "parallels/ubuntu-14.04"
     override.vm.box_url = "https://vagrantcloud.com/parallels/ubuntu-14.04"
@@ -29,12 +38,4 @@ Vagrant.configure("2") do |config|
   end
 
   config.ssh.forward_agent = true
-  
-  #virtualbox specific
-  config.vm.provider :virtualbox do |vb, override|
-    override.vm.synced_folder ".", "/vagrant", :mount_options => ["dmode=777","fmode=666"]
-    vb.customize ["modifyvm", :id, "--memory", "1024"]
-    vb.name = "simple-magento-vagrant"
-  end
-
 end
